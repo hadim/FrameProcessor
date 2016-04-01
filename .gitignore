@@ -1,0 +1,17 @@
+dist/
+build/
+
+core
+nbproject/*
+!nbproject/project.properties
+!nbproject/project.xml
+
+*.class
+
+*.so
+*.log
+*.out
+*~
+*.swp
+*.DS_Store
+*.lock
