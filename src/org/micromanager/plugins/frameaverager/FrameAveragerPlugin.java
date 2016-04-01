@@ -10,7 +10,7 @@ import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = ProcessorPlugin.class)
-public class TaggedFrameAverager implements ProcessorPlugin, SciJavaPlugin {
+public class FrameAveragerPlugin implements ProcessorPlugin, SciJavaPlugin {
 
     public static String menuName = "Frame Averager";
     public static String tooltipDescription = "Live Frame Averaging during acquisition";
