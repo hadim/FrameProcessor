@@ -18,13 +18,13 @@
     <attribute name="Built-Date" value="${TODAY}"/>
   </manifest>
 
-  <target name="-post-jar">
+<!--   <target name="-post-jar">
     <property name="MMPlugin_jar" value="dist/FrameAverager.jar"/>
     <property name="MMPlugin_dir" value="${work.dir}/mmplugins/FrameAverager.jar"/>
     <echo message="Copied plugin JAR file to MM plugins directory : ${MMPlugin_dir}" />
     <copy tofile="${MMPlugin_dir}">
       <fileset file="${MMPlugin_jar}"/>
     </copy>
-  </target>
+  </target> -->
 
 </project>
