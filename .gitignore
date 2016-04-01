@@ -15,3 +15,5 @@ nbproject/*
 *.swp
 *.DS_Store
 *.lock
+
+MANIFEST.MF

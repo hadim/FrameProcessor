@@ -5,6 +5,6 @@ Signature-Title: FrameAverager
 Signature-Vendor: Hadrien Mary, Brouhard lab, McGill University
 Application-Plugin: Micro-Manager
 Built-By: hadim
-Built-Version: ${Version_Major}.${Version_Minor}${Version_Type}
+Built-Version: 1.0
 Built-Date: 03-31-2016
 

@@ -1,42 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="FrameAverager" default="default" basedir=".">
-    <description>Livre frame averaging during acquisition (Micromanager Plugins)</description>
+  <description>Livre frame averaging during acquisition (Micromanager Plugins)</description>
 
-    <tstamp>
-      <format property="TODAY" pattern="MM-dd-yyyy" />
-    </tstamp>
+  <import file="nbproject/build-impl.xml"/>
 
-    <manifest file="MANIFEST.MF">
-      <attribute name="Signature-Title" value="FrameAverager"/>
-      <attribute name="Signature-Vendor" value="Hadrien Mary, Brouhard lab, McGill University"/>
-      <attribute name="Application-Plugin" value="Micro-Manager"/>
-      <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Built-Version" value="${Version_Major}.${Version_Minor}${Version_Type}"/>
-      <attribute name="Built-Date" value="${TODAY}"/>
-    </manifest>
+  <tstamp>
+    <format property="TODAY" pattern="MM-dd-yyyy" />
+  </tstamp>
+
+  <manifest file="MANIFEST.MF">
+    <attribute name="Signature-Title" value="FrameAverager"/>
+    <attribute name="Signature-Vendor" value="Hadrien Mary, Brouhard lab, McGill University"/>
+    <attribute name="Application-Plugin" value="Micro-Manager"/>
+    <attribute name="Built-By" value="${user.name}"/>
+    <attribute name="Built-Version" value="1.0"/>
+    <attribute name="Built-Date" value="${TODAY}"/>
+  </manifest>
 
   <target name="-post-jar">
-<!--     <property name="MMPlugin_dist1" value="dist/FrameAverager.jar"/>
-    <property name="MMPlugin_dir1" value="${work.dir}/mmplugins/FrameAverager.jar"/>
-    <copy tofile="${MMPlugin_dir1}">
-      <fileset file="${MMPlugin_dist1}"/>
+    <property name="MMPlugin_jar" value="dist/FrameAverager.jar"/>
+    <property name="MMPlugin_dir" value="${work.dir}/mmplugins/FrameAverager.jar"/>
+    <echo message="Copied plugin JAR file to MM plugins directory : ${MMPlugin_dir}" />
+    <copy tofile="${MMPlugin_dir}">
+      <fileset file="${MMPlugin_jar}"/>
     </copy>
-
-    <property name="MMPlugin_dist" value="dist/FrameAverager.jar"/>
-    <echo message="-Copied MM plugin JAR to dist: ${MMPlugin_dist}" />
-    <copy file="${basedir}/${dist.jar}" toDir="${pluginsDir}" />
-
-    <property name="MMPlugin_dir" location="C:\Program Files\Micro-Manager-1.4\mmplugins" />
-    <echo message="-Copied MM plugin JAR to basedir: ${basedir}" />
-    <copy file="${basedir}/${dist.jar}" toDir="${pluginsDir}" /> -->
   </target>
-
-<!--   <property name="pluginsDir"  location="C:\Program Files\Micro-Manager-1.4\mmplugins" />
-   <target name="-post-jar">
-   System.out.println(info);
-   <echo message="-Copied MM plugin JAR to basedir: ${basedir}" />
-   <copy file="${basedir}/${dist.jar}" toDir="${pluginsDir}" />
-   </target> -->
 
 </project>
