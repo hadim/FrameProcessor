@@ -133,12 +133,12 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
     public PropertyMap getSettings() {
         
         // Save preferences now.
-        setNumerOfImagesToAverage(Integer.parseInt(enableDuringAcquisitionBox_.getText()));
+        setNumerOfImagesToAverage(Integer.parseInt(numerOfImagesToAverageField_.getText()));
         setEnableDuringAcquisition(enableDuringAcquisitionBox_.isSelected());
         setEnableDuringLive(enableDuringLiveBox_.isSelected());
         
         PropertyMap.PropertyMapBuilder builder = studio_.data().getPropertyMapBuilder();
-        builder.putInt("numerOfImagesToAverage", Integer.parseInt(enableDuringAcquisitionBox_.getText()));
+        builder.putInt("numerOfImagesToAverage", Integer.parseInt(numerOfImagesToAverageField_.getText()));
         builder.putBoolean("enableDuringAcquisition", enableDuringAcquisitionBox_.isSelected());
         builder.putBoolean("enableDuringLive", enableDuringLiveBox_.isSelected());
         return builder.build();
