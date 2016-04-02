@@ -26,14 +26,12 @@ public class FrameAveragerPlugin implements ProcessorPlugin, SciJavaPlugin {
 
     @Override
     public ProcessorConfigurator createConfigurator(PropertyMap settings) {
-       //return new SplitViewFrame(settings, studio_);
-       return null;
+       return new FrameAveragerFrame(settings, studio_);
     }
 
     @Override
     public ProcessorFactory createFactory(PropertyMap settings) {
-       //return new SplitViewFactory(studio_, settings);
-       return null;
+       return new FrameAveragerFactory(studio_, settings);
     }
 
     @Override
