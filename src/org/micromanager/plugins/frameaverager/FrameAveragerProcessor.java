@@ -3,6 +3,7 @@ package org.micromanager.plugins.frameaverager;
 import ij.process.ImageProcessor;
 import org.micromanager.LogManager;
 import org.micromanager.Studio;
+import org.micromanager.data.Datastore;
 import org.micromanager.data.Image;
 import org.micromanager.data.Processor;
 import org.micromanager.data.ProcessorContext;
@@ -10,12 +11,13 @@ import org.micromanager.data.SummaryMetadata;
 
 public class FrameAveragerProcessor extends Processor {
 
-   private final Studio studio_;
-   private final LogManager log_;
-   
-   private final int numerOfImagesToAverage_;
-   private final boolean enableDuringAcquisition_;
-   private final boolean enableDuringLive_;
+    private final Studio studio_;
+    private final LogManager log_;
+    private Datastore store_;
+
+    private final int numerOfImagesToAverage_;
+    private final boolean enableDuringAcquisition_;
+    private final boolean enableDuringLive_;
 
     public FrameAveragerProcessor(Studio studio, int numerOfImagesToAverage,
             boolean enableDuringAcquisition, boolean enableDuringLive) {
@@ -26,17 +28,18 @@ public class FrameAveragerProcessor extends Processor {
         numerOfImagesToAverage_ = numerOfImagesToAverage;
         enableDuringAcquisition_ = enableDuringAcquisition;
         enableDuringLive_ = enableDuringLive;
+        
+        if (isProcessorEnable()) {
+            // Enable datastore ?
+            // even in live mode ?
+        }
+        
     }
 
     @Override
     public void processImage(Image image, ProcessorContext context) {
         
-        if (studio_.acquisitions().isAcquisitionRunning() && !enableDuringAcquisition_) {
-            context.outputImage(image);
-            return;
-        }
-        
-        if (studio_.live().getIsLiveModeOn() && !enableDuringLive_) {
+        if (!isProcessorEnable()) {
             context.outputImage(image);
             return;
         }
@@ -49,5 +52,17 @@ public class FrameAveragerProcessor extends Processor {
     public SummaryMetadata processSummaryMetadata(SummaryMetadata summary) {
         log_.logMessage("processSummaryMetadata");
         return summary.copy().build();
+    }
+    
+    public boolean isProcessorEnable(){
+        if (studio_.acquisitions().isAcquisitionRunning() && !enableDuringAcquisition_) {
+            return false;
+        }
+        
+        if (studio_.live().getIsLiveModeOn() && !enableDuringLive_) {
+            return false;
+        }
+        
+        return true;
     }
 }
