@@ -13,26 +13,30 @@ public class FrameAveragerProcessor extends Processor {
    private final Studio studio_;
    private final LogManager log_;
    
-   private final boolean processDuringMDA;
-   private final boolean processDuringLive;
+   private final int numerOfImagesToAverage_;
+   private final boolean enableDuringAcquisition_;
+   private final boolean enableDuringLive_;
 
-    public FrameAveragerProcessor(Studio studio) {
-       studio_ = studio;
-       log_ = studio_.logs();
+    public FrameAveragerProcessor(Studio studio, int numerOfImagesToAverage,
+            boolean enableDuringAcquisition, boolean enableDuringLive) {
+        
+        studio_ = studio;
+        log_ = studio_.logs();
 
-       processDuringMDA = true;
-       processDuringLive = true;
+        numerOfImagesToAverage_ = numerOfImagesToAverage;
+        enableDuringAcquisition_ = enableDuringAcquisition;
+        enableDuringLive_ = enableDuringLive;
     }
 
     @Override
     public void processImage(Image image, ProcessorContext context) {
         
-        if (studio_.acquisitions().isAcquisitionRunning() && !processDuringMDA) {
+        if (studio_.acquisitions().isAcquisitionRunning() && !enableDuringAcquisition_) {
             context.outputImage(image);
             return;
         }
         
-        if (studio_.live().getIsLiveModeOn() && !processDuringLive) {
+        if (studio_.live().getIsLiveModeOn() && !enableDuringLive_) {
             context.outputImage(image);
             return;
         }

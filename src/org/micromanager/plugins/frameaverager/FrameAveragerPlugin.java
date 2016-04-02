@@ -26,7 +26,7 @@ public class FrameAveragerPlugin implements ProcessorPlugin, SciJavaPlugin {
 
     @Override
     public ProcessorConfigurator createConfigurator(PropertyMap settings) {
-       return new FrameAveragerFrame(settings, studio_);
+       return new FrameAveragerConfigurator(settings, studio_);
     }
 
     @Override
