@@ -1,19 +1,49 @@
 package org.micromanager.plugins.frameaverager;
 
+import ij.process.ImageProcessor;
+import org.micromanager.LogManager;
 import org.micromanager.Studio;
 import org.micromanager.data.Image;
 import org.micromanager.data.Processor;
 import org.micromanager.data.ProcessorContext;
+import org.micromanager.data.SummaryMetadata;
 
 public class FrameAveragerProcessor extends Processor {
 
    private final Studio studio_;
+   private final LogManager log_;
+   
+   private final boolean processDuringMDA;
+   private final boolean processDuringLive;
 
-   public FrameAveragerProcessor(Studio studio) {
-      studio_ = studio;
-   }
+    public FrameAveragerProcessor(Studio studio) {
+       studio_ = studio;
+       log_ = studio_.logs();
+
+       processDuringMDA = true;
+       processDuringLive = true;
+    }
 
     @Override
-    public void processImage(Image image, ProcessorContext pc) {
+    public void processImage(Image image, ProcessorContext context) {
+        
+        if (studio_.acquisitions().isAcquisitionRunning() && !processDuringMDA) {
+            context.outputImage(image);
+            return;
+        }
+        
+        if (studio_.live().getIsLiveModeOn() && !processDuringLive) {
+            context.outputImage(image);
+            return;
+        }
+        
+        log_.logMessage("processImage");
+        context.outputImage(image);
+    }
+    
+   @Override
+    public SummaryMetadata processSummaryMetadata(SummaryMetadata summary) {
+        log_.logMessage("processSummaryMetadata");
+        return summary.copy().build();
     }
 }
