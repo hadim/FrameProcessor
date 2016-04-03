@@ -81,7 +81,6 @@ public class FrameAveragerProcessor extends Processor {
     
    @Override
     public SummaryMetadata processSummaryMetadata(SummaryMetadata summary) {
-        log_.logMessage("jjjjj");
         return summary.copy().build();
     }
     
