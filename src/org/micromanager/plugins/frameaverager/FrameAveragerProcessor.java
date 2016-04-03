@@ -49,6 +49,7 @@ public class FrameAveragerProcessor extends Processor {
         processedImage = null;
         
         log_.logMessage("FrameAverager : Algorithm applied on stack image is " + processorAlgo_);
+        log_.logMessage("FrameAverager : Number of frames to process " + Integer.toString(numerOfImagesToAverage_));
         
     }
 
@@ -71,8 +72,16 @@ public class FrameAveragerProcessor extends Processor {
                 Logger.getLogger(FrameAveragerProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            // Clean buffered images
+            for (int i=0; i < numerOfImagesToAverage_; i++){
+              bufferImages[i] = null;
+            }
+
             // Output processed image
             context.outputImage(processedImage);
+            
+            // Clean processed image
+            processedImage = null;
         }
 
         bufferImages[currentBufferIndex] = image;
@@ -103,30 +112,27 @@ public class FrameAveragerProcessor extends Processor {
         bufferImages = new Image[numerOfImagesToAverage_];
         for (int i=0; i < numerOfImagesToAverage_; i++){
               bufferImages[i] = null;
-          }
+        }
 
     }
     
     public void processBufferImages() throws Exception{
         
         if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MEAN)){
-            meanProcessImages();
+            meanProcessImages(false);
         }
         else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN)){
             throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
             //medianProcessImages();
         }
         else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_SUM)){
-            throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
-            //sumProcessImages();
+            meanProcessImages(true);
         }
         else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MAX)){
-            throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
-            //maxProcessImages();
+            extremaProcessImages("max");
         }
         else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MIN)){
-            throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
-            //minProcessImages();
+            extremaProcessImages("min");
         }
         else{
             throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
@@ -134,7 +140,7 @@ public class FrameAveragerProcessor extends Processor {
         
     }
     
-    public void meanProcessImages(){
+    public void meanProcessImages(boolean onlySum){
         
         // Could be moved outside processImage() ?
         Image img = bufferImages[0];
@@ -146,14 +152,13 @@ public class FrameAveragerProcessor extends Processor {
         Coords coords = img.getCoords();
         Metadata metadata = img.getMetadata();
 
+        Object resultPixels = null;
+        
         if (bytesPerPixel == 1) {
             
             // Create new array
-            byte[] newPixels = new byte[width * height];
-            
-            // Init the new array
-            for(int i=0; i < newPixels.length; i++)
-                newPixels[i] = 0;
+            float[] newPixels = new float[width * height];
+            byte[] newPixelsFinal = new byte[width * height];
             
             // Sum up all pixels from bufferImages
             for(int i=0; i < numerOfImagesToAverage_; i++){
@@ -164,26 +169,24 @@ public class FrameAveragerProcessor extends Processor {
                 
                 // Iterate over all pixels
                 for (int index = 0; index < newPixels.length; index++)
-                    newPixels[index] = (byte) (float) (newPixels[index] + (int) (imgPixels[index] & 0xff));  
+                    newPixels[index] = (float) (newPixels[index] + (int) (imgPixels[index] & 0xff));  
             }
             
             // Divide by length to get the mean
             for (int index = 0; index < newPixels.length; index++)
-                newPixels[index] = (byte) (int) (newPixels[index] / numerOfImagesToAverage_);
+                if (onlySum)
+                    newPixelsFinal[index] = (byte) (int) (newPixels[index]);
+                else
+                    newPixelsFinal[index] = (byte) (int) (newPixels[index] / numerOfImagesToAverage_);
             
-            // Create the processed image
-            processedImage = studio_.data().createImage(newPixels, width, height,
-                    bytesPerPixel, numComponents, coords, metadata);
+            resultPixels = newPixelsFinal;
             
         }
         else if (bytesPerPixel == 2) {
             
             // Create new array
-            short[] newPixels = new short[width * height];
-            
-            // Init the new array
-            for(int i=0; i < newPixels.length; i++)
-                newPixels[i] = 0;
+            float[] newPixels = new float[width * height];
+            short[] newPixelsFinal = new short[width * height];
             
             // Sum up all pixels from bufferImages
             for(int i=0; i < numerOfImagesToAverage_; i++){
@@ -194,38 +197,143 @@ public class FrameAveragerProcessor extends Processor {
                 
                 // Iterate over all pixels
                 for (int index = 0; index < newPixels.length; index++)
-                    newPixels[index] = (short) (float) (newPixels[index] + (int) (imgPixels[index] & 0xff));  
+                    newPixels[index] = (float) (newPixels[index] + (int) (imgPixels[index] & 0xffff));
             }
             
             // Divide by length to get the mean
             for (int index = 0; index < newPixels.length; index++)
-                newPixels[index] = (short) (int) (newPixels[index] / numerOfImagesToAverage_);
+                if (onlySum)
+                    newPixelsFinal[index] = (short) (int) (newPixels[index]);
+                else
+                    newPixelsFinal[index] = (short) (int) (newPixels[index] / numerOfImagesToAverage_);
             
-            // Create the processed image
-            processedImage = studio_.data().createImage(newPixels, width, height,
-                    bytesPerPixel, numComponents, coords, metadata);
+            resultPixels = newPixelsFinal;
             
         }
+        
+        // Create the processed image
+        processedImage = studio_.data().createImage(resultPixels, width, height,
+                bytesPerPixel, numComponents, coords, metadata);
+
       }
     
     public void medianProcessImages(){
         // TODO
-        processedImage =  bufferImages[0];
     }
     
-    public void sumProcessImages(){
-        // TODO
-        processedImage =  bufferImages[0];
-    }
-    
-    public void maxProcessImages(){
-        // TODO
-        processedImage =  bufferImages[0];
-    }
-    
-     public void minProcessImages(){
-        // TODO
-        processedImage =  bufferImages[0];
+    public void extremaProcessImages(String extremaType) throws Exception{
+        
+        // Could be moved outside processImage() ?
+        Image img = bufferImages[0];
+        int bitDepth = img.getMetadata().getBitDepth();
+        int width = img.getWidth();
+        int height = img.getHeight();
+        int bytesPerPixel = img.getBytesPerPixel();
+        int numComponents = img.getNumComponents();
+        Coords coords = img.getCoords();
+        Metadata metadata = img.getMetadata();
+
+        Object resultPixels = null;
+        
+        if (bytesPerPixel == 1) {
+            
+            // Create new array
+            float[] newPixels = new float[width * height];
+            byte[] newPixelsFinal = new byte[width * height];
+            
+            float currentValue;
+            float actualValue;
+            
+            // Init the new array
+            if (extremaType.equals("max"))
+                for(int i=0; i < newPixels.length; i++)
+                    newPixels[i] = 0;
+            else if (extremaType.equals("min"))
+                for(int i=0; i < newPixels.length; i++)
+                    newPixels[i] = Byte.MAX_VALUE;
+            else
+                throw new Exception("FrameAverager : Wrong extremaType " + extremaType);
+            
+            // Iterate over all frames
+            for(int i=0; i < numerOfImagesToAverage_; i++){
+                
+                // Get current frame pixels
+                img = bufferImages[i];
+                short[] imgPixels = (short[]) img.getRawPixels();
+
+                // Iterate over all pixels
+                for (int index = 0; index < newPixels.length; index++){
+                    currentValue = (float) (int) (imgPixels[index] & 0xffff);
+                    actualValue = (float) newPixels[index];
+                    
+                    if (extremaType.equals("max"))
+                        newPixels[index] = (float) Math.max(currentValue, actualValue);
+                    else if (extremaType.equals("min"))
+                        newPixels[index] = (float) Math.min(currentValue, actualValue);
+                    else
+                        throw new Exception("FrameAverager : Wrong extremaType " + extremaType);
+                }
+            }
+            
+            // Convert to short
+            for (int index = 0; index < newPixels.length; index++)
+                newPixelsFinal[index] = (byte) newPixels[index];
+            
+            resultPixels = newPixelsFinal;
+            
+        }
+        else if (bytesPerPixel == 2) {
+            
+            // Create new array
+            float[] newPixels = new float[width * height];
+            short[] newPixelsFinal = new short[width * height];
+            
+            float currentValue;
+            float actualValue;
+            
+            // Init the new array
+            if (extremaType.equals("max"))
+                for(int i=0; i < newPixels.length; i++)
+                    newPixels[i] = 0;
+            else if (extremaType.equals("min"))
+                for(int i=0; i < newPixels.length; i++)
+                    newPixels[i] = Byte.MAX_VALUE;
+            else
+                throw new Exception("FrameAverager : Wrong extremaType " + extremaType);
+            
+            // Iterate over all frames
+            for(int i=0; i < numerOfImagesToAverage_; i++){
+                
+                // Get current frame pixels
+                img = bufferImages[i];
+                short[] imgPixels = (short[]) img.getRawPixels();
+
+                // Iterate over all pixels
+                for (int index = 0; index < newPixels.length; index++){
+                    currentValue = (float) (int) (imgPixels[index] & 0xffff);
+                    actualValue = (float) newPixels[index];
+                    
+                    if (extremaType.equals("max"))
+                        newPixels[index] = (float) Math.max(currentValue, actualValue);
+                    else if (extremaType.equals("min"))
+                        newPixels[index] = (float) Math.min(currentValue, actualValue);
+                    else
+                        throw new Exception("FrameAverager : Wrong extremaType " + extremaType); 
+                }
+            }
+            
+            // Convert to short
+            for (int index = 0; index < newPixels.length; index++)
+                newPixelsFinal[index] = (short) newPixels[index];
+            
+            resultPixels = newPixelsFinal;
+   
+        }
+        
+        // Create the processed image
+        processedImage = studio_.data().createImage(resultPixels, width, height,
+                bytesPerPixel, numComponents, coords, metadata);
+        
     }
 
 }
