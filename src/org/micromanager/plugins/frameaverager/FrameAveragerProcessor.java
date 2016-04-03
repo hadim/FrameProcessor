@@ -121,10 +121,10 @@ public class FrameAveragerProcessor extends Processor {
         if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MEAN)){
             meanProcessImages(false);
         }
-        else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN)){
-            throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
-            //medianProcessImages();
-        }
+//        else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN)){
+//            throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
+//            //medianProcessImages();
+//        }
         else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_SUM)){
             meanProcessImages(true);
         }
@@ -217,9 +217,9 @@ public class FrameAveragerProcessor extends Processor {
 
       }
     
-    public void medianProcessImages(){
-        // TODO
-    }
+//    public void medianProcessImages(){
+//        // TODO
+//    }
     
     public void extremaProcessImages(String extremaType) throws Exception{
         

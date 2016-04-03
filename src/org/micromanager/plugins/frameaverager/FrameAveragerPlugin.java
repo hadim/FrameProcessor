@@ -18,7 +18,7 @@ public class FrameAveragerPlugin implements ProcessorPlugin, SciJavaPlugin {
     public static String copyright = "Hadrien Mary";
     
    public static String PROCESSOR_ALGO_MEAN = "Mean";
-   public static String PROCESSOR_ALGO_MEDIAN = "Median";
+   //public static String PROCESSOR_ALGO_MEDIAN = "Median";
    public static String PROCESSOR_ALGO_SUM = "Sum";
    public static String PROCESSOR_ALGO_MAX = "Max";
    public static String PROCESSOR_ALGO_MIN = "Min";

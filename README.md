@@ -4,6 +4,12 @@ A friendly fork of the excellent FrameAverager plugin from [OpenPolScope](http:/
 
 The purpose of this plugin is to update it to Micromanager 2.0.
 
+# Features
+
+This plugin can perform several classic operations during **live** or **MDA** such as `mean`, `sum`, `max` and `min` on a certain number of frames defined by the user.
+
+Current state of the plugin doesn't allow a complex MDA with multiple Z, CHANNEL and XY_POSITION. **Any help on this feature is welcome**.
+
 # Usage
 
 - Download the JAR file [FrameAverager.jar](./dist/FrameAverager.jar).

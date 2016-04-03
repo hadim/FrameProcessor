@@ -145,7 +145,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEAN);&#xa;processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN);&#xa;processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_SUM);&#xa;processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MAX);&#xa;processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MIN);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEAN);&#xa;//processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN);&#xa;processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_SUM);&#xa;processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MAX);&#xa;processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MIN);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
           </AuxValues>
         </Component>

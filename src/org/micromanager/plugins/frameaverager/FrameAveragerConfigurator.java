@@ -66,7 +66,7 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
         jLabel2.setText("Algorithm to apply on image stack");
 
         processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEAN);
-        processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN);
+        //processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN);
         processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_SUM);
         processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MAX);
         processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MIN);
