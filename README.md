@@ -13,8 +13,11 @@ Current state of the plugin doesn't allow a complex MDA with multiple Z, CHANNEL
 # Usage
 
 - Download the JAR file [FrameAverager.jar](./dist/FrameAverager.jar).
-- Copy it to `YOUR_MICRO_MANAGER_FOLDER/mmplugins/`
-- Launch Micromanager
+- Copy it to `YOUR_MICRO_MANAGER_FOLDER/mmplugins/`.
+- Launch Micromanager.
+- Execute the plugin with “Plugin > On-The-Fly Image Processing > Frame Averager”.
+- Launch a live or MDA acquisition.
+- The acquisition window should display the processed images (mean image of the last 10 images by default).
 
 Please report any issue to https://github.com/hadim/FrameAverager/issues.
 
