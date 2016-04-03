@@ -10,6 +10,8 @@ This plugin can perform several classic operations during **live** or **MDA** su
 
 Current state of the plugin doesn't allow a complex MDA with multiple Z, CHANNEL and XY_POSITION. **Any help on this feature is welcome**.
 
+![Screenshot of the Frame Averager plugin](/screenshot.png)
+
 # Usage
 
 - Download the JAR file [FrameAverager.jar](./dist/FrameAverager.jar).
