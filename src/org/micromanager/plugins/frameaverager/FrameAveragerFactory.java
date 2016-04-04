@@ -22,9 +22,9 @@ public class FrameAveragerFactory implements ProcessorFactory {
    public Processor createProcessor() {
       log_.logMessage("FrameAverager : Create FrameAveragerProcessor");
       return new FrameAveragerProcessor(studio_,
-            settings_.getString("processorAlgo", FrameAveragerPlugin.PROCESSOR_ALGO_MEAN),
-            settings_.getInt("numerOfImagesToAverage", 10),
-            settings_.getBoolean("enableDuringAcquisition", true),
-            settings_.getBoolean("enableDuringLive", true));
+              settings_.getString("processorAlgo", FrameAveragerPlugin.PROCESSOR_ALGO_MEAN),
+              settings_.getInt("numerOfImagesToAverage", 10),
+              settings_.getBoolean("enableDuringAcquisition", true),
+              settings_.getBoolean("enableDuringLive", true));
    }
 }

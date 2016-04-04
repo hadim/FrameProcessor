@@ -12,51 +12,51 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = ProcessorPlugin.class)
 public class FrameAveragerPlugin implements ProcessorPlugin, SciJavaPlugin {
 
-    public static String menuName = "Frame Averager";
-    public static String tooltipDescription = "Live Frame Averaging during acquisition";
-    public static String versionNumber = "1.0";
-    public static String copyright = "Hadrien Mary";
-    
+   public static String menuName = "Frame Averager";
+   public static String tooltipDescription = "Live Frame Averaging during acquisition";
+   public static String versionNumber = "1.0";
+   public static String copyright = "Hadrien Mary";
+
    public static String PROCESSOR_ALGO_MEAN = "Mean";
    //public static String PROCESSOR_ALGO_MEDIAN = "Median";
    public static String PROCESSOR_ALGO_SUM = "Sum";
    public static String PROCESSOR_ALGO_MAX = "Max";
    public static String PROCESSOR_ALGO_MIN = "Min";
 
-    private Studio studio_;
+   private Studio studio_;
 
-    @Override
-    public void setContext(Studio studio) {
-       studio_ = studio;
-    }
+   @Override
+   public void setContext(Studio studio) {
+      studio_ = studio;
+   }
 
-    @Override
-    public ProcessorConfigurator createConfigurator(PropertyMap settings) {
-       return new FrameAveragerConfigurator(settings, studio_);
-    }
+   @Override
+   public ProcessorConfigurator createConfigurator(PropertyMap settings) {
+      return new FrameAveragerConfigurator(settings, studio_);
+   }
 
-    @Override
-    public ProcessorFactory createFactory(PropertyMap settings) {
-       return new FrameAveragerFactory(studio_, settings);
-    }
+   @Override
+   public ProcessorFactory createFactory(PropertyMap settings) {
+      return new FrameAveragerFactory(studio_, settings);
+   }
 
-    @Override
-    public String getName() {
-       return menuName;
-    }
+   @Override
+   public String getName() {
+      return menuName;
+   }
 
-    @Override
-    public String getHelpText() {
-       return tooltipDescription;
-    }
+   @Override
+   public String getHelpText() {
+      return tooltipDescription;
+   }
 
-    @Override
-    public String getVersion() {
-       return versionNumber;
-    }
+   @Override
+   public String getVersion() {
+      return versionNumber;
+   }
 
-    @Override
-    public String getCopyright() {
-       return copyright;
-    }
+   @Override
+   public String getCopyright() {
+      return copyright;
+   }
 }

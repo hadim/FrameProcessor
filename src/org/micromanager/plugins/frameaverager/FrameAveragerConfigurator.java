@@ -11,26 +11,26 @@ import org.micromanager.data.ProcessorConfigurator;
 import org.micromanager.internal.utils.MMFrame;
 
 public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfigurator {
-    
-    private static final String PROCESSOR_ALGO = "Algorithm to apply on stack images";
-    private static final String NUMBER_TO_AVERAGE = "Number of images to average";
-    private static final String ENABLE_MDA = "Whether or not enable the plugin during acquisition";
-    private static final String ENABLE_LIVE = "Whether or not enable the plugin during live";
-    
-    private final Studio studio_;
-    private final CMMCore core_;
-    private final PropertyMap settings_;
 
-    public FrameAveragerConfigurator(PropertyMap settings, Studio studio) {
-       studio_ = studio;
-       core_ = studio_.getCMMCore();
-       settings_ = settings;
+   private static final String PROCESSOR_ALGO = "Algorithm to apply on stack images";
+   private static final String NUMBER_TO_AVERAGE = "Number of images to average";
+   private static final String ENABLE_MDA = "Whether or not enable the plugin during acquisition";
+   private static final String ENABLE_LIVE = "Whether or not enable the plugin during live";
 
-       initComponents();
-       loadSettingValue();
-    }
+   private final Studio studio_;
+   private final CMMCore core_;
+   private final PropertyMap settings_;
 
-    @SuppressWarnings("unchecked")
+   public FrameAveragerConfigurator(PropertyMap settings, Studio studio) {
+      studio_ = studio;
+      core_ = studio_.getCMMCore();
+      settings_ = settings;
+
+      initComponents();
+      loadSettingValue();
+   }
+
+   @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -128,87 +128,87 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadSettingValue() {
-        processorAlgoBox_.setSelectedItem(settings_.getString(
-                "processorAlgo", getProcessorAglo()));
-        numerOfImagesToAverageField_.setText(settings_.getString(
-                "numerOfImagesToAverage", Integer.toString(getNumerOfImagesToAverage())));
-        enableDuringAcquisitionBox_.setSelected(
-                settings_.getBoolean("enableDuringAcquisition",
-                        getEnableDuringAcquisition()));
-        enableDuringLiveBox_.setSelected(
-                settings_.getBoolean("enableDuringLive",
-                        getEnableDuringLive()));
-    }
-    
-    @Override
-    public void showGUI() {
-        pack();
-        setVisible(true);
-    }
+   private void loadSettingValue() {
+      processorAlgoBox_.setSelectedItem(settings_.getString(
+              "processorAlgo", getProcessorAglo()));
+      numerOfImagesToAverageField_.setText(settings_.getString(
+              "numerOfImagesToAverage", Integer.toString(getNumerOfImagesToAverage())));
+      enableDuringAcquisitionBox_.setSelected(
+              settings_.getBoolean("enableDuringAcquisition",
+                      getEnableDuringAcquisition()));
+      enableDuringLiveBox_.setSelected(
+              settings_.getBoolean("enableDuringLive",
+                      getEnableDuringLive()));
+   }
 
-    @Override
-    public void cleanup() {
-        dispose();
-    }
+   @Override
+   public void showGUI() {
+      pack();
+      setVisible(true);
+   }
 
-    @Override
-    public PropertyMap getSettings() {
-        
-        // Save preferences now.
-        setProcessorAglo((String) processorAlgoBox_.getSelectedItem());
-        setNumerOfImagesToAverage(Integer.parseInt(numerOfImagesToAverageField_.getText()));
-        setEnableDuringAcquisition(enableDuringAcquisitionBox_.isSelected());
-        setEnableDuringLive(enableDuringLiveBox_.isSelected());
-        
-        PropertyMap.PropertyMapBuilder builder = studio_.data().getPropertyMapBuilder();
-        builder.putString("processorAlgo", (String) processorAlgoBox_.getSelectedItem());
-        builder.putInt("numerOfImagesToAverage", Integer.parseInt(numerOfImagesToAverageField_.getText()));
-        builder.putBoolean("enableDuringAcquisition", enableDuringAcquisitionBox_.isSelected());
-        builder.putBoolean("enableDuringLive", enableDuringLiveBox_.isSelected());
-        return builder.build();
-    }
+   @Override
+   public void cleanup() {
+      dispose();
+   }
 
-    private String getProcessorAglo() {
+   @Override
+   public PropertyMap getSettings() {
+
+      // Save preferences now.
+      setProcessorAglo((String) processorAlgoBox_.getSelectedItem());
+      setNumerOfImagesToAverage(Integer.parseInt(numerOfImagesToAverageField_.getText()));
+      setEnableDuringAcquisition(enableDuringAcquisitionBox_.isSelected());
+      setEnableDuringLive(enableDuringLiveBox_.isSelected());
+
+      PropertyMap.PropertyMapBuilder builder = studio_.data().getPropertyMapBuilder();
+      builder.putString("processorAlgo", (String) processorAlgoBox_.getSelectedItem());
+      builder.putInt("numerOfImagesToAverage", Integer.parseInt(numerOfImagesToAverageField_.getText()));
+      builder.putBoolean("enableDuringAcquisition", enableDuringAcquisitionBox_.isSelected());
+      builder.putBoolean("enableDuringLive", enableDuringLiveBox_.isSelected());
+      return builder.build();
+   }
+
+   private String getProcessorAglo() {
       return studio_.profile().getString(FrameAveragerConfigurator.class,
               PROCESSOR_ALGO, FrameAveragerPlugin.PROCESSOR_ALGO_MEAN);
-    }
+   }
 
-    private void setProcessorAglo(String processorAlgo) {
+   private void setProcessorAglo(String processorAlgo) {
       studio_.profile().setString(FrameAveragerConfigurator.class,
               PROCESSOR_ALGO, processorAlgo);
-    }
-    
-    private int getNumerOfImagesToAverage() {
+   }
+
+   private int getNumerOfImagesToAverage() {
       return studio_.profile().getInt(FrameAveragerConfigurator.class,
               NUMBER_TO_AVERAGE, 10);
-    }
+   }
 
-    private void setNumerOfImagesToAverage(int numerOfImagesToAverage) {
+   private void setNumerOfImagesToAverage(int numerOfImagesToAverage) {
       studio_.profile().setInt(FrameAveragerConfigurator.class,
               NUMBER_TO_AVERAGE, numerOfImagesToAverage);
-    }
+   }
 
-    private boolean getEnableDuringAcquisition() {
+   private boolean getEnableDuringAcquisition() {
       return studio_.profile().getBoolean(FrameAveragerConfigurator.class,
               ENABLE_MDA, true);
-    }
+   }
 
-    private void setEnableDuringAcquisition(boolean enableDuringAcquisition) {
+   private void setEnableDuringAcquisition(boolean enableDuringAcquisition) {
       studio_.profile().setBoolean(FrameAveragerConfigurator.class,
               ENABLE_MDA, enableDuringAcquisition);
-    }
+   }
 
-    private boolean getEnableDuringLive() {
+   private boolean getEnableDuringLive() {
       return studio_.profile().getBoolean(FrameAveragerConfigurator.class,
               ENABLE_LIVE, true);
-    }
+   }
 
-    private void setEnableDuringLive(boolean enableDuringLive) {
+   private void setEnableDuringLive(boolean enableDuringLive) {
       studio_.profile().getBoolean(FrameAveragerConfigurator.class,
               ENABLE_LIVE, true);
-    }
-    
+   }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox enableDuringAcquisitionBox_;
     private javax.swing.JCheckBox enableDuringLiveBox_;
