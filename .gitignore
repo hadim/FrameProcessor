@@ -2,7 +2,7 @@ build/
 
 core
 nbproject/*
-!nbproject/project.properties
+nbproject/project.properties
 !nbproject/project.xml
 
 *.class
