@@ -16,3 +16,4 @@ nbproject/*
 *.lock
 
 MANIFEST.MF
+/dist/

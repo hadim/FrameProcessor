@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.micromanager.LogManager;
+import org.micromanager.PropertyMap;
 import org.micromanager.Studio;
 import org.micromanager.data.Coords;
 import org.micromanager.data.Image;
@@ -77,6 +78,15 @@ public class FrameAveragerProcessor extends Processor {
               bufferImages[i] = null;
             }
 
+            // Add metadata to the processed image
+            Metadata metadata = processedImage.getMetadata();
+            PropertyMap userData = metadata.getUserData();
+            userData = userData.copy().putBoolean("FrameProcessed", true).build();
+            userData = userData.copy().putString("FrameProcessed-Operation", processorAlgo_).build();
+            userData = userData.copy().putInt("FrameProcessed-StackNumber", numerOfImagesToAverage_).build();
+            metadata = metadata.copy().userData(userData).build();
+            processedImage = processedImage.copyWithMetadata(metadata);
+            
             // Output processed image
             context.outputImage(processedImage);
             
