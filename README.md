@@ -1,27 +1,27 @@
-# FrameAverager
+# FrameProcessor
 
-A friendly fork of the excellent FrameAverager plugin from [OpenPolScope](http://www.openpolscope.org/pages/MMPlugin_Frame_Averager.htm) available on github at https://github.com/LC-PolScope/Micro-Manager-Addons.
+A [Micro-Manager](https://micro-manager.org/) plugin that can process stack images in time. The processing can be applied in real-time (live mode) or during an acquisition (MDA).
 
-The purpose of this plugin is to update it to Micromanager 2.0.
+This plugin has been inspired from the excellent FrameAverager plugin from [OpenPolScope](http://www.openpolscope.org/pages/MMPlugin_Frame_Averager.htm) available on github at https://github.com/LC-PolScope/Micro-Manager-Addons.
+
+The motivation to create this plugin was to make it compatible with Micro-Manager 2 and also add more processing operations.
 
 # Features
 
 This plugin can perform several classic operations during **live** or **MDA** such as `mean`, `sum`, `max` and `min` on a certain number of frames defined by the user.
 
-Current state of the plugin doesn't allow a complex MDA with multiple Z, CHANNEL and XY_POSITION. **Any help on this feature is welcome**.
-
-![Screenshot of the Frame Averager plugin](/screenshot.png)
+![Screenshot of the Frame Processor plugin](/screenshot.png)
 
 # Usage
 
-- Download the JAR file [FrameAverager.jar](./dist/FrameAverager.jar).
+- Download the JAR file [FrameProcessor.jar](./dist/FrameProcessor.jar).
 - Copy it to `YOUR_MICRO_MANAGER_FOLDER/mmplugins/`.
 - Launch Micromanager.
-- Execute the plugin with “Plugin > On-The-Fly Image Processing > Frame Averager”.
+- Execute the plugin with “Plugin > On-The-Fly Image Processing > Frame Processor.
 - Launch a live or MDA acquisition.
 - The acquisition window should display the processed images (mean image of the last 10 images by default).
 
-Please report any issue to https://github.com/hadim/FrameAverager/issues.
+Please report any issue to https://github.com/hadim/FrameProcessor/issues.
 
 # Develop
 

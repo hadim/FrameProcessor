@@ -1,4 +1,4 @@
-package org.micromanager.plugins.frameaverager;
+package org.micromanager.plugins.frameprocessor;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,13 +13,13 @@ import org.micromanager.data.Processor;
 import org.micromanager.data.ProcessorContext;
 import org.micromanager.data.SummaryMetadata;
 
-public class FrameAveragerProcessor extends Processor {
+public class FrameProcessor extends Processor {
 
    private final Studio studio_;
    private final LogManager log_;
 
    private final String processorAlgo_;
-   private final int numerOfImagesToAverage_;
+   private final int numerOfImagesToProcess_;
    private final boolean enableDuringAcquisition_;
    private final boolean enableDuringLive_;
 
@@ -28,29 +28,29 @@ public class FrameAveragerProcessor extends Processor {
    private int currentBufferIndex;
    private Image processedImage;
 
-   public FrameAveragerProcessor(Studio studio, String processorAlgo,
-           int numerOfImagesToAverage, boolean enableDuringAcquisition,
+   public FrameProcessor(Studio studio, String processorAlgo,
+           int numerOfImagesToProcess, boolean enableDuringAcquisition,
            boolean enableDuringLive) {
 
       studio_ = studio;
       log_ = studio_.logs();
 
       processorAlgo_ = processorAlgo;
-      numerOfImagesToAverage_ = numerOfImagesToAverage;
+      numerOfImagesToProcess_ = numerOfImagesToProcess;
       enableDuringAcquisition_ = enableDuringAcquisition;
       enableDuringLive_ = enableDuringLive;
 
       current_frame_index = 0;
-      bufferImages = new Image[numerOfImagesToAverage_];
+      bufferImages = new Image[numerOfImagesToProcess_];
 
-      for (int i = 0; i < numerOfImagesToAverage_; i++) {
+      for (int i = 0; i < numerOfImagesToProcess_; i++) {
          bufferImages[i] = null;
       }
 
       processedImage = null;
 
-      log_.logMessage("FrameAverager : Algorithm applied on stack image is " + processorAlgo_);
-      log_.logMessage("FrameAverager : Number of frames to process " + Integer.toString(numerOfImagesToAverage_));
+      log_.logMessage("FrameProcessor : Algorithm applied on stack image is " + processorAlgo_);
+      log_.logMessage("FrameProcessor : Number of frames to process " + Integer.toString(numerOfImagesToProcess));
 
    }
 
@@ -62,19 +62,19 @@ public class FrameAveragerProcessor extends Processor {
          return;
       }
 
-      currentBufferIndex = current_frame_index % numerOfImagesToAverage_;
+      currentBufferIndex = current_frame_index % numerOfImagesToProcess_;
 
       if (currentBufferIndex == 0 && current_frame_index != 0) {
 
          try {
-            // Process last `numerOfImagesToAverage_` images
+            // Process last `numerOfImagesToProcess_` images
             processBufferImages();
          } catch (Exception ex) {
-            Logger.getLogger(FrameAveragerProcessor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FrameProcessor.class.getName()).log(Level.SEVERE, null, ex);
          }
 
          // Clean buffered images
-         for (int i = 0; i < numerOfImagesToAverage_; i++) {
+         for (int i = 0; i < numerOfImagesToProcess_; i++) {
             bufferImages[i] = null;
          }
 
@@ -84,7 +84,7 @@ public class FrameAveragerProcessor extends Processor {
          if (userData != null) {
             userData = userData.copy().putBoolean("FrameProcessed", true).build();
             userData = userData.copy().putString("FrameProcessed-Operation", processorAlgo_).build();
-            userData = userData.copy().putInt("FrameProcessed-StackNumber", numerOfImagesToAverage_).build();
+            userData = userData.copy().putInt("FrameProcessed-StackNumber", numerOfImagesToProcess_).build();
             metadata = metadata.copy().userData(userData).build();
          }
          processedImage = processedImage.copyWithMetadata(metadata);
@@ -120,8 +120,8 @@ public class FrameAveragerProcessor extends Processor {
 
       current_frame_index = 0;
 
-      bufferImages = new Image[numerOfImagesToAverage_];
-      for (int i = 0; i < numerOfImagesToAverage_; i++) {
+      bufferImages = new Image[numerOfImagesToProcess_];
+      for (int i = 0; i < numerOfImagesToProcess_; i++) {
          bufferImages[i] = null;
       }
 
@@ -129,20 +129,20 @@ public class FrameAveragerProcessor extends Processor {
 
    public void processBufferImages() throws Exception {
 
-      if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MEAN)) {
+      if (processorAlgo_.equals(FrameProcessorPlugin.PROCESSOR_ALGO_MEAN)) {
          meanProcessImages(false);
-      } //        else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN)){
-      //            throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
+      } //        else if (processorAlgo_.equals(FrameProcessorPlugin.PROCESSOR_ALGO_MEDIAN)){
+      //            throw new Exception("FrameProcessor : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
       //            //medianProcessImages();
       //        }
-      else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_SUM)) {
+      else if (processorAlgo_.equals(FrameProcessorPlugin.PROCESSOR_ALGO_SUM)) {
          meanProcessImages(true);
-      } else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MAX)) {
+      } else if (processorAlgo_.equals(FrameProcessorPlugin.PROCESSOR_ALGO_MAX)) {
          extremaProcessImages("max");
-      } else if (processorAlgo_.equals(FrameAveragerPlugin.PROCESSOR_ALGO_MIN)) {
+      } else if (processorAlgo_.equals(FrameProcessorPlugin.PROCESSOR_ALGO_MIN)) {
          extremaProcessImages("min");
       } else {
-         throw new Exception("FrameAverager : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
+         throw new Exception("FrameProcessor : Algorithm called " + processorAlgo_ + " is not implemented or not found.");
       }
 
    }
@@ -168,7 +168,7 @@ public class FrameAveragerProcessor extends Processor {
          byte[] newPixelsFinal = new byte[width * height];
 
          // Sum up all pixels from bufferImages
-         for (int i = 0; i < numerOfImagesToAverage_; i++) {
+         for (int i = 0; i < numerOfImagesToProcess_; i++) {
 
             // Get current frame pixels
             img = bufferImages[i];
@@ -185,7 +185,7 @@ public class FrameAveragerProcessor extends Processor {
             if (onlySum) {
                newPixelsFinal[index] = (byte) (int) (newPixels[index]);
             } else {
-               newPixelsFinal[index] = (byte) (int) (newPixels[index] / numerOfImagesToAverage_);
+               newPixelsFinal[index] = (byte) (int) (newPixels[index] / numerOfImagesToProcess_);
             }
          }
 
@@ -198,7 +198,7 @@ public class FrameAveragerProcessor extends Processor {
          short[] newPixelsFinal = new short[width * height];
 
          // Sum up all pixels from bufferImages
-         for (int i = 0; i < numerOfImagesToAverage_; i++) {
+         for (int i = 0; i < numerOfImagesToProcess_; i++) {
 
             // Get current frame pixels
             img = bufferImages[i];
@@ -215,7 +215,7 @@ public class FrameAveragerProcessor extends Processor {
             if (onlySum) {
                newPixelsFinal[index] = (short) (int) (newPixels[index]);
             } else {
-               newPixelsFinal[index] = (short) (int) (newPixels[index] / numerOfImagesToAverage_);
+               newPixelsFinal[index] = (short) (int) (newPixels[index] / numerOfImagesToProcess_);
             }
          }
 
@@ -265,11 +265,11 @@ public class FrameAveragerProcessor extends Processor {
                newPixels[i] = Byte.MAX_VALUE;
             }
          } else {
-            throw new Exception("FrameAverager : Wrong extremaType " + extremaType);
+            throw new Exception("FrameProcessor : Wrong extremaType " + extremaType);
          }
 
          // Iterate over all frames
-         for (int i = 0; i < numerOfImagesToAverage_; i++) {
+         for (int i = 0; i < numerOfImagesToProcess_; i++) {
 
             // Get current frame pixels
             img = bufferImages[i];
@@ -285,7 +285,7 @@ public class FrameAveragerProcessor extends Processor {
                } else if (extremaType.equals("min")) {
                   newPixels[index] = (float) Math.min(currentValue, actualValue);
                } else {
-                  throw new Exception("FrameAverager : Wrong extremaType " + extremaType);
+                  throw new Exception("FrameProcessor : Wrong extremaType " + extremaType);
                }
             }
          }
@@ -316,11 +316,11 @@ public class FrameAveragerProcessor extends Processor {
                newPixels[i] = Byte.MAX_VALUE;
             }
          } else {
-            throw new Exception("FrameAverager : Wrong extremaType " + extremaType);
+            throw new Exception("FrameProcessor : Wrong extremaType " + extremaType);
          }
 
          // Iterate over all frames
-         for (int i = 0; i < numerOfImagesToAverage_; i++) {
+         for (int i = 0; i < numerOfImagesToProcess_; i++) {
 
             // Get current frame pixels
             img = bufferImages[i];
@@ -336,7 +336,7 @@ public class FrameAveragerProcessor extends Processor {
                } else if (extremaType.equals("min")) {
                   newPixels[index] = (float) Math.min(currentValue, actualValue);
                } else {
-                  throw new Exception("FrameAverager : Wrong extremaType " + extremaType);
+                  throw new Exception("FrameProcessor : Wrong extremaType " + extremaType);
                }
             }
          }

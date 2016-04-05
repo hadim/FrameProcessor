@@ -1,4 +1,4 @@
-package org.micromanager.plugins.frameaverager;
+package org.micromanager.plugins.frameprocessor;
 
 import java.text.NumberFormat;
 import javax.swing.text.NumberFormatter;
@@ -10,10 +10,10 @@ import org.micromanager.Studio;
 import org.micromanager.data.ProcessorConfigurator;
 import org.micromanager.internal.utils.MMFrame;
 
-public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfigurator {
+public class FrameProcessorConfigurator extends MMFrame implements ProcessorConfigurator {
 
    private static final String PROCESSOR_ALGO = "Algorithm to apply on stack images";
-   private static final String NUMBER_TO_AVERAGE = "Number of images to average";
+   private static final String NUMBER_TO_PROCESS = "Number of images to process";
    private static final String ENABLE_MDA = "Whether or not enable the plugin during acquisition";
    private static final String ENABLE_LIVE = "Whether or not enable the plugin during live";
 
@@ -21,7 +21,7 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
    private final CMMCore core_;
    private final PropertyMap settings_;
 
-   public FrameAveragerConfigurator(PropertyMap settings, Studio studio) {
+   public FrameProcessorConfigurator(PropertyMap settings, Studio studio) {
       studio_ = studio;
       core_ = studio_.getCMMCore();
       settings_ = settings;
@@ -44,13 +44,13 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
         formatter.setMaximum(Integer.MAX_VALUE);
         formatter.setCommitsOnValidEdit(true);
         formatter.setAllowsInvalid(false);
-        numerOfImagesToAverageField_ = new javax.swing.JFormattedTextField(formatter);
+        numerOfImagesToProcessField_ = new javax.swing.JFormattedTextField(formatter);
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         processorAlgoBox_ = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("FrameAverager Processor Configuration");
+        setTitle("FrameProcessor Processor Configuration");
 
         enableDuringAcquisitionBox_.setText("Enable during acquisition");
         enableDuringAcquisitionBox_.setName(""); // NOI18N
@@ -58,17 +58,17 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
         enableDuringLiveBox_.setText("Enable during live mode");
         enableDuringLiveBox_.setName(""); // NOI18N
 
-        numerOfImagesToAverageField_.setName("_"); // NOI18N
+        numerOfImagesToProcessField_.setName("_"); // NOI18N
 
-        jLabel1.setText("Number of images to average");
+        jLabel1.setText("Number of images to process");
 
         jLabel2.setText("Algorithm to apply on image stack");
 
-        processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEAN);
-        //processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MEDIAN);
-        processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_SUM);
-        processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MAX);
-        processorAlgoBox_.addItem(FrameAveragerPlugin.PROCESSOR_ALGO_MIN);
+        processorAlgoBox_.addItem(FrameProcessorPlugin.PROCESSOR_ALGO_MEAN);
+        //processorAlgoBox_.addItem(FrameProcessorPlugin.PROCESSOR_ALGO_MEDIAN);
+        processorAlgoBox_.addItem(FrameProcessorPlugin.PROCESSOR_ALGO_SUM);
+        processorAlgoBox_.addItem(FrameProcessorPlugin.PROCESSOR_ALGO_MAX);
+        processorAlgoBox_.addItem(FrameProcessorPlugin.PROCESSOR_ALGO_MIN);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -83,7 +83,7 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(numerOfImagesToAverageField_)
+                            .addComponent(numerOfImagesToProcessField_)
                             .addComponent(enableDuringAcquisitionBox_)
                             .addComponent(enableDuringLiveBox_))
                         .addContainerGap(24, Short.MAX_VALUE))
@@ -100,7 +100,7 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numerOfImagesToAverageField_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(numerOfImagesToProcessField_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addComponent(enableDuringAcquisitionBox_)
@@ -131,8 +131,8 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
    private void loadSettingValue() {
       processorAlgoBox_.setSelectedItem(settings_.getString(
               "processorAlgo", getProcessorAglo()));
-      numerOfImagesToAverageField_.setText(settings_.getString(
-              "numerOfImagesToAverage", Integer.toString(getNumerOfImagesToAverage())));
+      numerOfImagesToProcessField_.setText(settings_.getString(
+              "numerOfImagesToProcess", Integer.toString(getNumerOfImagesToProcess())));
       enableDuringAcquisitionBox_.setSelected(
               settings_.getBoolean("enableDuringAcquisition",
                       getEnableDuringAcquisition()));
@@ -157,55 +157,55 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
 
       // Save preferences now.
       setProcessorAglo((String) processorAlgoBox_.getSelectedItem());
-      setNumerOfImagesToAverage(Integer.parseInt(numerOfImagesToAverageField_.getText()));
+      setNumerOfImagesToProcess(Integer.parseInt(numerOfImagesToProcessField_.getText()));
       setEnableDuringAcquisition(enableDuringAcquisitionBox_.isSelected());
       setEnableDuringLive(enableDuringLiveBox_.isSelected());
 
       PropertyMap.PropertyMapBuilder builder = studio_.data().getPropertyMapBuilder();
       builder.putString("processorAlgo", (String) processorAlgoBox_.getSelectedItem());
-      builder.putInt("numerOfImagesToAverage", Integer.parseInt(numerOfImagesToAverageField_.getText()));
+      builder.putInt("numerOfImagesToProcess", Integer.parseInt(numerOfImagesToProcessField_.getText()));
       builder.putBoolean("enableDuringAcquisition", enableDuringAcquisitionBox_.isSelected());
       builder.putBoolean("enableDuringLive", enableDuringLiveBox_.isSelected());
       return builder.build();
    }
 
    private String getProcessorAglo() {
-      return studio_.profile().getString(FrameAveragerConfigurator.class,
-              PROCESSOR_ALGO, FrameAveragerPlugin.PROCESSOR_ALGO_MEAN);
+      return studio_.profile().getString(FrameProcessorConfigurator.class,
+              PROCESSOR_ALGO, FrameProcessorPlugin.PROCESSOR_ALGO_MEAN);
    }
 
    private void setProcessorAglo(String processorAlgo) {
-      studio_.profile().setString(FrameAveragerConfigurator.class,
+      studio_.profile().setString(FrameProcessorConfigurator.class,
               PROCESSOR_ALGO, processorAlgo);
    }
 
-   private int getNumerOfImagesToAverage() {
-      return studio_.profile().getInt(FrameAveragerConfigurator.class,
-              NUMBER_TO_AVERAGE, 10);
+   private int getNumerOfImagesToProcess() {
+      return studio_.profile().getInt(FrameProcessorConfigurator.class,
+              NUMBER_TO_PROCESS, 10);
    }
 
-   private void setNumerOfImagesToAverage(int numerOfImagesToAverage) {
-      studio_.profile().setInt(FrameAveragerConfigurator.class,
-              NUMBER_TO_AVERAGE, numerOfImagesToAverage);
+   private void setNumerOfImagesToProcess(int numerOfImagesToProcess) {
+      studio_.profile().setInt(FrameProcessorConfigurator.class,
+              NUMBER_TO_PROCESS, numerOfImagesToProcess);
    }
 
    private boolean getEnableDuringAcquisition() {
-      return studio_.profile().getBoolean(FrameAveragerConfigurator.class,
+      return studio_.profile().getBoolean(FrameProcessorConfigurator.class,
               ENABLE_MDA, true);
    }
 
    private void setEnableDuringAcquisition(boolean enableDuringAcquisition) {
-      studio_.profile().setBoolean(FrameAveragerConfigurator.class,
+      studio_.profile().setBoolean(FrameProcessorConfigurator.class,
               ENABLE_MDA, enableDuringAcquisition);
    }
 
    private boolean getEnableDuringLive() {
-      return studio_.profile().getBoolean(FrameAveragerConfigurator.class,
+      return studio_.profile().getBoolean(FrameProcessorConfigurator.class,
               ENABLE_LIVE, true);
    }
 
    private void setEnableDuringLive(boolean enableDuringLive) {
-      studio_.profile().getBoolean(FrameAveragerConfigurator.class,
+      studio_.profile().getBoolean(FrameProcessorConfigurator.class,
               ENABLE_LIVE, true);
    }
 
@@ -215,7 +215,7 @@ public class FrameAveragerConfigurator extends MMFrame implements ProcessorConfi
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JFormattedTextField numerOfImagesToAverageField_;
+    private javax.swing.JFormattedTextField numerOfImagesToProcessField_;
     private javax.swing.JComboBox processorAlgoBox_;
     // End of variables declaration//GEN-END:variables
 }

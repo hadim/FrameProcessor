@@ -1,4 +1,4 @@
-package org.micromanager.plugins.frameaverager;
+package org.micromanager.plugins.frameprocessor;
 
 import org.micromanager.data.ProcessorConfigurator;
 import org.micromanager.data.ProcessorFactory;
@@ -10,10 +10,10 @@ import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = ProcessorPlugin.class)
-public class FrameAveragerPlugin implements ProcessorPlugin, SciJavaPlugin {
+public class FrameProcessorPlugin implements ProcessorPlugin, SciJavaPlugin {
 
-   public static String menuName = "Frame Averager";
-   public static String tooltipDescription = "Live Frame Averaging during acquisition";
+   public static String menuName = "Frame Processor";
+   public static String tooltipDescription = "Live Frame Processing during acquisition";
    public static String versionNumber = "1.0";
    public static String copyright = "Hadrien Mary";
 
@@ -32,12 +32,12 @@ public class FrameAveragerPlugin implements ProcessorPlugin, SciJavaPlugin {
 
    @Override
    public ProcessorConfigurator createConfigurator(PropertyMap settings) {
-      return new FrameAveragerConfigurator(settings, studio_);
+      return new FrameProcessorConfigurator(settings, studio_);
    }
 
    @Override
    public ProcessorFactory createFactory(PropertyMap settings) {
-      return new FrameAveragerFactory(studio_, settings);
+      return new FrameProcessorFactory(studio_, settings);
    }
 
    @Override
