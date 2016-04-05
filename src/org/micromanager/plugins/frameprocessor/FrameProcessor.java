@@ -24,6 +24,8 @@ public class FrameProcessor extends Processor {
    private final boolean enableDuringLive_;
 
    private int current_frame_index;
+   private int processed_frame_index;
+   private int newIntendedTime;
    private Image[] bufferImages;
    private int currentBufferIndex;
    private Image processedImage;
@@ -41,6 +43,7 @@ public class FrameProcessor extends Processor {
       enableDuringLive_ = enableDuringLive;
 
       current_frame_index = 0;
+      processed_frame_index = 0;
       bufferImages = new Image[numerOfImagesToProcess_];
 
       for (int i = 0; i < numerOfImagesToProcess_; i++) {
@@ -61,10 +64,12 @@ public class FrameProcessor extends Processor {
          context.outputImage(image);
          return;
       }
-
+      
       currentBufferIndex = current_frame_index % numerOfImagesToProcess_;
+      
+      bufferImages[currentBufferIndex] = image;
 
-      if (currentBufferIndex == 0 && current_frame_index != 0) {
+      if (currentBufferIndex == (numerOfImagesToProcess_ - 1)) {
 
          try {
             // Process last `numerOfImagesToProcess_` images
@@ -89,6 +94,14 @@ public class FrameProcessor extends Processor {
          }
          processedImage = processedImage.copyWithMetadata(metadata);
 
+         // Add correct metadata if in acquisition mode
+         if (studio_.acquisitions().isAcquisitionRunning()) {
+            Coords.CoordsBuilder builder = processedImage.getCoords().copy();
+            builder.time(processed_frame_index);
+            processedImage = processedImage.copyAtCoords(builder.build());
+            processed_frame_index += 1;
+         }
+
          // Output processed image
          context.outputImage(processedImage);
 
@@ -96,13 +109,25 @@ public class FrameProcessor extends Processor {
          processedImage = null;
       }
 
-      bufferImages[currentBufferIndex] = image;
       current_frame_index += 1;
    }
 
    @Override
    public SummaryMetadata processSummaryMetadata(SummaryMetadata summary) {
-      return summary.copy().build();
+
+      if (studio_.acquisitions().isAcquisitionRunning()) {
+         
+         // Calculate new number of times
+         newIntendedTime = (int) (summary.getIntendedDimensions().getTime() / numerOfImagesToProcess_);
+         
+         Coords.CoordsBuilder coordsBuilder = summary.getIntendedDimensions().copy();
+         SummaryMetadata.SummaryMetadataBuilder builder = summary.copy();
+         builder.intendedDimensions(coordsBuilder.time(newIntendedTime).build());
+
+         return builder.build();
+      } else {
+         return summary;
+      }
    }
 
    public final boolean isProcessorEnable() {
