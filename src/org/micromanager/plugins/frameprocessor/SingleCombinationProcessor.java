@@ -10,33 +10,37 @@ import org.micromanager.data.Image;
 import org.micromanager.data.Metadata;
 import org.micromanager.data.ProcessorContext;
 
-public class SingleAcqProcessor {
+public class SingleCombinationProcessor {
 
    private final Studio studio_;
    private final LogManager log_;
-   
+
    private final Coords coords_;
    private Image processedImage;
-   
+
    private final String processorAlgo_;
    private final int numerOfImagesToProcess_;
-   
+
+   // Do we want to enable processing for this combinations of Z, Channel, Stage Position ?
+   private final boolean processCombinations_;
+
    private int current_frame_index;
    private int processed_frame_index;
    private Image[] bufferImages;
    private int currentBufferIndex;
-   
-   public SingleAcqProcessor(Coords coords, Studio studio,
-           String processorAlgo, int numerOfImagesToProcess) {
-      
+
+   public SingleCombinationProcessor(Coords coords, Studio studio,
+           String processorAlgo, int numerOfImagesToProcess, boolean processCombinations) {
+
       studio_ = studio;
       log_ = studio_.logs();
-      
+
       coords_ = coords;
-      
+
       processorAlgo_ = processorAlgo;
       numerOfImagesToProcess_ = numerOfImagesToProcess;
-      
+      processCombinations_ = processCombinations;
+
       current_frame_index = 0;
       processed_frame_index = 0;
       bufferImages = new Image[numerOfImagesToProcess_];
@@ -48,14 +52,18 @@ public class SingleAcqProcessor {
       processedImage = null;
 
    }
-   
-   public void logMe(){
-      log_.logMessage("Z : " + Integer.toString(coords_.getZ()) +
-              " | Channel : " + Integer.toString(coords_.getChannel()) +
-              " | Stage Position : " + Integer.toString(coords_.getStagePosition()));
+
+   public void logMe() {
+      log_.logMessage("Z : " + Integer.toString(coords_.getZ())
+              + " | Channel : " + Integer.toString(coords_.getChannel())
+              + " | Stage Position : " + Integer.toString(coords_.getStagePosition()));
    }
 
    void addImage(Image image, ProcessorContext context) {
+
+      if (!processCombinations_) {
+         context.outputImage(image);
+      }
 
       currentBufferIndex = current_frame_index % numerOfImagesToProcess_;
       bufferImages[currentBufferIndex] = image;
@@ -101,16 +109,16 @@ public class SingleAcqProcessor {
       }
 
       current_frame_index += 1;
-      
+
    }
-   
-   public void clear(){
+
+   public void clear() {
       for (int i = 0; i < numerOfImagesToProcess_; i++) {
          bufferImages[i] = null;
       }
       bufferImages = null;
    }
-   
+
    public void processBufferImages() throws Exception {
 
       if (processorAlgo_.equals(FrameProcessorPlugin.PROCESSOR_ALGO_MEAN)) {
@@ -126,7 +134,7 @@ public class SingleAcqProcessor {
       }
 
    }
-   
+
    public void meanProcessImages(boolean onlySum) {
 
       // Could be moved outside processImage() ?
@@ -331,5 +339,5 @@ public class SingleAcqProcessor {
       processedImage = studio_.data().createImage(resultPixels, width, height,
               bytesPerPixel, numComponents, coords, metadata);
 
-   }     
+   }
 }

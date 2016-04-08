@@ -9,7 +9,7 @@ import org.micromanager.Studio;
 public class FrameProcessorFactory implements ProcessorFactory {
 
    private final Studio studio_;
-   private PropertyMap settings_;
+   private final PropertyMap settings_;
    private final LogManager log_;
 
    public FrameProcessorFactory(Studio studio, PropertyMap settings) {
@@ -25,6 +25,7 @@ public class FrameProcessorFactory implements ProcessorFactory {
               settings_.getString("processorAlgo", FrameProcessorPlugin.PROCESSOR_ALGO_MEAN),
               settings_.getInt("numerOfImagesToProcess", 10),
               settings_.getBoolean("enableDuringAcquisition", true),
-              settings_.getBoolean("enableDuringLive", true));
+              settings_.getBoolean("enableDuringLive", true),
+              settings_.getString("channelsToAvoid", ""));
    }
 }
