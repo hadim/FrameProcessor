@@ -95,7 +95,7 @@ public class SingleCombinationProcessor {
             metadata = metadata.copy().userData(userData).build();
          }
          processedImage = processedImage.copyWithMetadata(metadata);
-         log_.logMessage(Boolean.toString(isAnyChannelToAvoid_));
+
          // Add correct metadata if in acquisition mode
          if (studio_.acquisitions().isAcquisitionRunning() && !isAnyChannelToAvoid_) {
             Coords.CoordsBuilder builder = processedImage.getCoords().copy();
