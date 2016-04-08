@@ -10,6 +10,8 @@ The motivation to create this plugin was to make it compatible with Micro-Manage
 
 This plugin can perform several classic operations during **live** or **MDA** such as `mean`, `sum`, `max` and `min` on a certain number of frames defined by the user.
 
+Images are processed for each combinations of Z, Channel and Stage Position.
+
 ![Screenshot of the Frame Processor plugin](/screenshot.png)
 
 # Usage
