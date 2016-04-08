@@ -84,7 +84,7 @@ public class FrameProcessor extends Processor {
          }
 
          singleAcquProc = new SingleCombinationProcessor(coords, studio_, processorAlgo_,
-                 numerOfImagesToProcess_, processCombinations);
+                 numerOfImagesToProcess_, processCombinations, !channelsToAvoid_.isEmpty());
          singleAquisitions.put(coords, singleAcquProc);
       } else {
          singleAcquProc = singleAquisitions.get(coords);

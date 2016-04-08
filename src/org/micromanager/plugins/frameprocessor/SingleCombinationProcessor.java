@@ -23,14 +23,15 @@ public class SingleCombinationProcessor {
 
    // Do we want to enable processing for this combinations of Z, Channel, Stage Position ?
    private final boolean processCombinations_;
+   private final boolean isAnyChannelToAvoid_;
 
    private int current_frame_index;
    private int processed_frame_index;
    private Image[] bufferImages;
    private int currentBufferIndex;
 
-   public SingleCombinationProcessor(Coords coords, Studio studio,
-           String processorAlgo, int numerOfImagesToProcess, boolean processCombinations) {
+   public SingleCombinationProcessor(Coords coords, Studio studio, String processorAlgo,
+           int numerOfImagesToProcess, boolean processCombinations, boolean isAnyChannelToAvoid) {
 
       studio_ = studio;
       log_ = studio_.logs();
@@ -40,6 +41,7 @@ public class SingleCombinationProcessor {
       processorAlgo_ = processorAlgo;
       numerOfImagesToProcess_ = numerOfImagesToProcess;
       processCombinations_ = processCombinations;
+      isAnyChannelToAvoid_ = isAnyChannelToAvoid;
 
       current_frame_index = 0;
       processed_frame_index = 0;
@@ -63,6 +65,7 @@ public class SingleCombinationProcessor {
 
       if (!processCombinations_) {
          context.outputImage(image);
+         return;
       }
 
       currentBufferIndex = current_frame_index % numerOfImagesToProcess_;
@@ -92,9 +95,9 @@ public class SingleCombinationProcessor {
             metadata = metadata.copy().userData(userData).build();
          }
          processedImage = processedImage.copyWithMetadata(metadata);
-
+         log_.logMessage(Boolean.toString(isAnyChannelToAvoid_));
          // Add correct metadata if in acquisition mode
-         if (studio_.acquisitions().isAcquisitionRunning()) {
+         if (studio_.acquisitions().isAcquisitionRunning() && !isAnyChannelToAvoid_) {
             Coords.CoordsBuilder builder = processedImage.getCoords().copy();
             builder.time(processed_frame_index);
             processedImage = processedImage.copyAtCoords(builder.build());
