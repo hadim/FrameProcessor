@@ -6,15 +6,7 @@ This plugin has been inspired from the excellent FrameAverager plugin from [Open
 
 The motivation to create this plugin was to make it compatible with Micro-Manager 2 and also add more processing operations.
 
-# Features
-
-- This plugin can perform several classic operations during **live** or **MDA** such as `mean`, `sum`, `max` and `min` on a certain number of frames defined by the user.
-- Images are processed for each combinations of Z, Channel and Stage Position.
-- User can choose a set of channels to be ignored by the processor.
-
-![Screenshot of the Frame Processor plugin](/screenshot.png)
-
-# Usage
+# Install
 
 - Download the JAR file at https://github.com/hadim/FrameProcessor/releases.
 - Copy it to `YOUR_MICRO_MANAGER_FOLDER/mmplugins/`.
@@ -24,6 +16,14 @@ The motivation to create this plugin was to make it compatible with Micro-Manage
 - The acquisition window should display the processed images (mean image of the last 10 images by default).
 
 Please report any issue to https://github.com/hadim/FrameProcessor/issues.
+
+# Features
+
+- This plugin can perform several classic operations during **live** or **MDA** such as `mean`, `sum`, `max` and `min` on a certain number of frames defined by the user.
+- Images are processed for each combinations of Z, Channel and Stage Position.
+- User can choose a set of channels to be ignored by the processor.
+
+![Screenshot of the Frame Processor plugin](/screenshot.png)
 
 # Develop
 
