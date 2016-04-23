@@ -19,7 +19,7 @@ The motivation to create this plugin was to make it compatible with Micro-Manage
 - Download the JAR file at https://github.com/hadim/FrameProcessor/releases.
 - Copy it to `YOUR_MICRO_MANAGER_FOLDER/mmplugins/`.
 - Launch Micromanager.
-- Execute the plugin with “Plugin > On-The-Fly Image Processing > Frame Processor.
+- Execute the plugin with Plugin ▶ On-The-Fly Image Processing ▶ Frame Processor.
 - Launch a live or MDA acquisition.
 - The acquisition window should display the processed images (mean image of the last 10 images by default).
 
