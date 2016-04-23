@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/4163/hadim/pygraphml.svg)](https://zenodo.org/badge/latestdoi/4163/hadim/FrameProcessor)
+[![DOI](https://zenodo.org/badge/4163/hadim/FrameProcessor.svg)](https://zenodo.org/badge/latestdoi/4163/hadim/FrameProcessor)
 
 # FrameProcessor
 
@@ -29,7 +29,7 @@ Please report any issue to https://github.com/hadim/FrameProcessor/issues.
 
 # How to cite
 
-If you use this plugin for your research, don't forget to cite it : [![DOI](https://zenodo.org/badge/4163/hadim/pygraphml.svg)](https://zenodo.org/badge/latestdoi/4163/hadim/FrameProcessor)
+If you use this plugin for your research, don't forget to cite it : [![DOI](https://zenodo.org/badge/4163/hadim/FrameProcessor.svg)](https://zenodo.org/badge/latestdoi/4163/hadim/FrameProcessor)
 
 
 # Develop
