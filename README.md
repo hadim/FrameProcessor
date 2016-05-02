@@ -1,4 +1,6 @@
-[![DOI](https://zenodo.org/badge/4163/hadim/FrameProcessor.svg)](https://zenodo.org/badge/latestdoi/4163/hadim/FrameProcessor)
+# THIS PLUGIN IS NOW INTEGRATED TO MICRO-MANAGER. SEE https://micro-manager.org/wiki/FrameProcessor FOR ANYMORE DETAILS.
+
+---
 
 # FrameProcessor
 
@@ -26,11 +28,6 @@ Please report any issue to https://github.com/hadim/FrameProcessor/issues.
 - User can choose a set of channels to be ignored by the processor.
 
 ![Screenshot of the Frame Processor plugin](/screenshot.png)
-
-# How to cite
-
-If you use this plugin for your research, don't forget to cite it : [![DOI](https://zenodo.org/badge/4163/hadim/FrameProcessor.svg)](https://zenodo.org/badge/latestdoi/4163/hadim/FrameProcessor)
-
 
 # Develop
 
